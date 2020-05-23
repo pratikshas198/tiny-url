@@ -6,10 +6,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tiny.url.entity.json.TinyUrlJson;
 import com.tiny.url.service.TinyUrlService;
 
 @Controller
@@ -27,32 +29,20 @@ public class TinyUrlController {
 	@Autowired
 	TinyUrlService tinyUrlService;
 	
-	@RequestMapping(value="/getTinyUrl", method = {RequestMethod.POST}, produces = {"text/xml"})
-	public @ResponseBody String getTinyUrl() {
-		String tinyUrlXml = null;
+	@RequestMapping(value = "/getFullUrl", method = RequestMethod.POST)
+	public @ResponseBody TinyUrlJson getFullUrl(@RequestBody TinyUrlJson url) {
 		String fullUrl;
-		String subDomain;
-		String key;
-		
-		fullUrl = request.getParameter("fullUrl");
-		subDomain = request.getParameter("subDomain");
-		key = request.getParameter("authenticationkey");
-		
-		tinyUrlXml = tinyUrlService.generateTinyUrl(fullUrl, subDomain, key);
-		return tinyUrlXml;
+		fullUrl = tinyUrlService.getFullUrl(url.getTinyUrl());
+		url.setFullUrl(fullUrl);
+		return url;
 	}
 	
-	@RequestMapping(value="/getFullUrl", method = {RequestMethod.POST}, produces = {"text/xml"})
-	public @ResponseBody String getFullUrl(){
-		String fullUrlXml = null;
+	@RequestMapping(value = "/getTinyUrl", method = RequestMethod.POST)
+	public @ResponseBody TinyUrlJson getTinyUrl(@RequestBody TinyUrlJson url) {
 		String tinyUrl;
-		String key;
-		
-		tinyUrl = request.getParameter("tinyUrl");
-		key = request.getParameter("authenticationKey");
-		
-		fullUrlXml = tinyUrlService.getFullUrl(tinyUrl, key);
-		return fullUrlXml;
+		tinyUrl = tinyUrlService.generateTinyUrl(url.getFullUrl(), url.getSubDomain());
+		url.setTinyUrl(tinyUrl);
+		return url;
 	}
 	
 }
