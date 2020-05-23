@@ -21,10 +21,7 @@ public class TinyUrl {
 	
 	@Column(name="TINY_URL")
 	private String tinyUrl;
-	
-	@Column(name="AUTHENTICATION_KEY")
-	private String authenticationKey;
-	
+		
 	@Column(name="SUB_DOMAIN")
 	private String subDomain;
 	
@@ -52,14 +49,7 @@ public class TinyUrl {
 		this.tinyUrl = tinyUrl;
 	}
 
-	public String getAuthenticationKey() {
-		return authenticationKey;
-	}
-
-	public void setAuthenticationKey(String authenticationKey) {
-		this.authenticationKey = authenticationKey;
-	}
-
+	
 	public String getSubDomain() {
 		return subDomain;
 	}
